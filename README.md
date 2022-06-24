@@ -7,9 +7,9 @@ Fun interactive fighting game using Canvas, HTML, and Javascript.
 ## Controls
 - Left Character
   A: Left
-  D: Right
-  W: Up
-  Space Bar: Attack
+    D: Right
+      W: Up
+        Space Bar: Attack
 - Right Character
   :arrow_left:: Left
   :arrow_right:: Right
