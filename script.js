@@ -68,6 +68,14 @@ const player = new Fighter({
       attack1: {
         imageSrc: './assets/samuraiMack/Attack1.png',
         framesMax: 6
+      },
+      takeHit: {
+        imageSrc: './assets/samuraiMack/Take Hit - white silhouette.png',
+        framesMax: 4
+      },
+      death: {
+        imageSrc: './assets/samuraiMack/Death.png',
+        framesMax: 6
       }
     },
     attackBox: {
@@ -122,6 +130,14 @@ const enemy = new Fighter({
       attack1: {
         imageSrc: './assets/kenji/Attack1.png',
         framesMax: 4
+      },
+      takeHit: {
+        imageSrc: './assets/kenji/Take hit.png',
+        framesMax: 3
+      },
+      death: {
+        imageSrc: './assets/kenji/Death.png',
+        framesMax: 7
       }
     },
     attackBox: {
@@ -162,6 +178,8 @@ function animate() {
     c.fillRect(0, 0, canvas.width, canvas.height)
     background.update()
     shop.update()
+    c.fillStyle = 'rgba(255, 255, 255, 0.15)'
+    c.fillRect(0, 0, canvas.width, canvas.height)
     player.update()
     enemy.update()
 
@@ -205,7 +223,7 @@ function animate() {
     enemy.switchSprite('fall')
   }
 
-    // Detect for Collision //
+    // Detect for Collision & Enemy Gets Hit //
     if (
         rectangularCollision({
           rectangle1: player,
@@ -213,9 +231,13 @@ function animate() {
     }) && 
         player.isAttacking && player.framesCurrent === 4
         ) {
+        enemy.takeHit()
         player.isAttacking = false
-        enemy.health -= 20
-        document.querySelector('#enemyHealth').style.width = enemy.health + '%'
+
+        // Health Sliding Animation //
+        gsap.to('#enemyHealth', {
+          width: enemy.health + '%'
+        })
     }
 
     // If Player Misses //
@@ -223,6 +245,7 @@ function animate() {
       player.isAttacking = false
     }
 
+    // Player Gets Hit //
     if (
         rectangularCollision({
           rectangle1: player,
@@ -230,9 +253,13 @@ function animate() {
     }) && 
         enemy.isAttacking && enemy.framesCurrent === 2
         ) {
+        player.takeHit()
         enemy.isAttacking = false
-        player.health -= 20
-        document.querySelector('#playerHealth').style.width = player.health + '%'
+
+        // Health Sliding Animation //
+        gsap.to('#playerHealth', {
+          width: player.health + '%'
+        })
     }
 
     // If Enemy Misses //
